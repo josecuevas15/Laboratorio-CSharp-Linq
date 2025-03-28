@@ -116,8 +116,14 @@ foreach (var patient in patientsPriority)
 ### Solucion:
 
  ```csharp
-double avgAgeGeneralPediatrics = patients.Where(p => p.specialty == "general medicine"
-                                     || p.specialty == "pediatrics").Average(p => p.age);
+var specialtiesAvgAge = patients.GroupBy(p => p.specialty).Select(s => new
+{
+    SPECIALTY = s.Key,
+    AvgAge = s.Average(p => p.age)
+});
 
- Console.WriteLine($"AVERAGE AGE OF PATIENTS IN GENERAL AND PEDIATRICS: {avgAgeGeneralPediatrics}");
+foreach (var specialty in specialtiesAvgAge)
+{
+    Console.WriteLine(specialty);
+}
 ```
