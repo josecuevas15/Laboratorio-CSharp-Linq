@@ -51,6 +51,8 @@ foreach (var patient in pediatricsUnderTen)
 
 ## 2 - Queremos activar el protocolo de urgencia si hay algún paciente con ritmo cardíaco mayor que 100 o temperatura mayor a 39.
 
+### Solucion:
+
 ```csharp
 var heart100OrTemp39 = patients.Where(p => p.heartRate > 100 || p.temperature > 39)
                                   .ToList();
@@ -63,6 +65,8 @@ foreach (var patient in heart100OrTemp39)
 ```
 
 ## 3 - No podemos atender a todos los pacientes hoy por lo que vamos a crear una nueva coleccion y reasignar a los pacientes de pediatrics a general medicine
+
+### Solucion:
 
 ```csharp
 var pediatrics = patients.Where(p => p.specialty == "pediatrics")
@@ -78,3 +82,42 @@ foreach (var patient in pediatrics)
 ```
 
 ## 4 - Queremos conocer de una sola consulta el numero de pacientes que estan asignado a general medicine y a pediatrics.
+
+### Solucion:
+
+```csharp
+var specialties = patients.GroupBy(p => p.specialty);
+
+foreach (var specialty in specialties) {
+    Console.WriteLine($"SPECIALTY: {specialty.Key}  PATIENTS: {specialty.Count()}");
+}
+```
+## 5 - Devuelve una lista nueva que por cada paciente se indique si tiene prioridad o no. Se tendrá prioridad si el ritmo cardiaco es mayor 100 o la temperatura es mayor a 39.
+
+### Solucion:
+
+```csharp
+var patientsPriority = patients.Select(p => new{
+    NAME = p.name,
+    LASTNAME = p.lastname,
+    HEARTRATE = p.heartRate,
+    TEMPERATURE = p.temperature,
+    Priority = p.heartRate > 100 || p.temperature > 39
+}).ToList();
+foreach (var patient in patientsPriority)
+{
+    
+    Console.WriteLine(patient);
+
+}
+```
+## 6 - Queremos conocer de una sola consulta La edad media de pacientes asignados a pediatrics y general medicine.
+
+### Solucion:
+
+ ```csharp
+double avgAgeGeneralPediatrics = patients.Where(p => p.specialty == "general medicine"
+                                     || p.specialty == "pediatrics").Average(p => p.age);
+
+ Console.WriteLine($"AVERAGE AGE OF PATIENTS IN GENERAL AND PEDIATRICS: {avgAgeGeneralPediatrics}");
+```
